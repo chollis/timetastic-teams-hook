@@ -3,7 +3,7 @@ Simple AWS Lambda function to pull absence data from [Timetastic](https://timeta
 
 # usage
 - Clone repository
-- Run `npm install` to grab [Axios](https://github.com/axios/axios) dependancy
+- Run `npm install --only=prod` to grab [Axios](https://github.com/axios/axios) dependancy
 - Zip `node_modules` and `index.js` and upload to AWS Lambda
 - Create two environment variables for the lambda function:
   - `TIMETASTIC_AUTH`: Your API key from Timetastic
