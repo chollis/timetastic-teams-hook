@@ -55,6 +55,20 @@ async function getHolidays() {
   }
 }
 
+async function postToTeams(card) {
+  try {
+    const response = await axios.post(process.env.TEAMS_WEBHOOK_URL, card, {
+      headers: {
+        'content-type': 'application/vnd.microsoft.teams.card.o365connector',
+        'content-length': `${card.toString().length}`,
+      },
+    });
+    return `${response.status} - ${response.statusText}`;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 function determineHolidayLength(startDate, startType, endDate, endType) {
   if (startDate === endDate) {
     // Today only, morning or afternoon
@@ -94,8 +108,13 @@ async function getHolidayList() {
   }, {});
 }
 
-exports.handler = () => {
-  getHolidayList().then((data) => {
+exports.handler = async () => {
+  const data = await getHolidayList();
+  
+  if (Object.keys(data).length === 0 && data.constructor === Object) {
+    console.log('no absences');
+    return 'No absences to report';
+  } else {
     const departments = Object.keys(data);
     let text = '';
 
@@ -111,16 +130,7 @@ exports.handler = () => {
 
     const result = { text };
     card.sections.push(result);
-
-    axios.post(process.env.TEAMS_WEBHOOK_URL, card, {
-      headers: {
-        'content-type': 'application/vnd.microsoft.teams.card.o365connector',
-        'content-length': `${card.toString().length}`,
-      },
-    })
-      .then(res => `${res.status} - ${res.statusText}`)
-      .catch((err) => {
-        throw new Error(err);
-      });
-  });
+    const posted = await postToTeams(card);
+    return posted;
+    };
 };
