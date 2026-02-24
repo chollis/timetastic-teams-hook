@@ -1,9 +1,11 @@
+**Archive Notice:** This repository has been archived as I don't have the time to maintain it. If anybody forks this repo, please ensure you update the dependencies as there are reported vulnerabilities.
+
 # timetastic-teams-hook
 Simple AWS Lambda function to pull absence data from [Timetastic](https://timetastic.co.uk/) and post to a channel in [Microsoft Teams](https://products.office.com/en-gb/microsoft-teams/group-chat-software?rtc=1)
 
 # usage
 - Clone repository
-- Run `npm install --only=prod` to grab [Axios](https://github.com/axios/axios) dependancy
+- Run `npm install --only=prod` to grab [Axios](https://github.com/axios/axios) dependency
 - Zip `node_modules` and `index.js` and upload to AWS Lambda
 - Create two environment variables for the lambda function:
   - `TIMETASTIC_AUTH`: Your API key from Timetastic
